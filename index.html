@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Convert to Public Dropbox Link</title>
+</head>
+<body>
+	<form>
+		<input id="db_link" type="text">
+		<a href="#" onclick="process_submission();">Convert!</a>
+		<input type="text" id="public_link" disabled>
+	</form>
+
+	<script>
+	function process_submission() {
+		var db_link = document.getElementById('db_link').value;
+
+		var file_name = db_link.substring(db_link.lastIndexOf("/") + 1);
+
+		document.getElementById('public_link').value = "https://dl.dropboxusercontent.com/u/9296799/TheGIFFile/" + file_name;
+	}
+	</script>
+</body>
+</html>

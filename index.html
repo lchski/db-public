@@ -15,9 +15,26 @@
 	function process_submission() {
 		var db_link = document.getElementById('db_link').value;
 
-		var file_name = db_link.substring(db_link.lastIndexOf("/") + 1);
+		unshorten_link(db_link);
+	}
 
-		document.getElementById('public_link').value = "https://dl.dropboxusercontent.com/u/9296799/TheGIFFile/" + file_name;
+	function unshorten_link(link) {
+		console.log("AJAX Function Called");
+		xmlhttp = new XMLHttpRequest();
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				console.log("Good AJAX Reply");
+				var expanded_link = xmlhttp.responseText.resolvedURL;
+
+				var file_name = expanded_link.substring(db_link.lastIndexOf("/") + 1);
+
+				document.getElementById('public_link').value = "https://dl.dropboxusercontent.com/u/9296799/TheGIFFile/" + file_name;
+			}
+		}
+
+		xmlhttp.open("GET", "http://api.unshort.me/unshorten?r=" + link + "&api_key=9059e112be00a40606e7e16162e10e9a", true);
+		xmlhttp.send();
 	}
 	</script>
 </body>

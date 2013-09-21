@@ -11,6 +11,7 @@
 		<input type="text" id="public_link" disabled>
 	</form>
 
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script>
 	function process_submission() {
 		var db_link = document.getElementById('db_link').value;
@@ -19,22 +20,25 @@
 	}
 
 	function unshorten_link(link) {
-		console.log("AJAX Function Called");
-		xmlhttp = new XMLHttpRequest();
+		jQuery.ajax({
+			url: 'http://api.unshort.me/unshorten',
+			dataType: 'jsonp',
+			data: {
+				r: link,
+				api_key: '9059e112be00a40606e7e16162e10e9a',
+				format: 'jsonp'
+			},
+			success: function(json) {
+				var expanded_link = json.resolvedURL;
 
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				console.log("Good AJAX Reply");
-				var expanded_link = xmlhttp.responseText.resolvedURL;
-
-				var file_name = expanded_link.substring(db_link.lastIndexOf("/") + 1);
+				var file_name = expanded_link.substring(expanded_link.lastIndexOf("/") + 1);
 
 				document.getElementById('public_link').value = "https://dl.dropboxusercontent.com/u/9296799/TheGIFFile/" + file_name;
+			},
+			error: function() {
+				console.log("Couldn't do our AJAX thang.");
 			}
-		}
-
-		xmlhttp.open("GET", "http://api.unshort.me/unshorten?r=" + link + "&api_key=9059e112be00a40606e7e16162e10e9a", true);
-		xmlhttp.send();
+		});
 	}
 	</script>
 </body>
